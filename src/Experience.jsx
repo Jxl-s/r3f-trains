@@ -1,8 +1,9 @@
-import { Box, OrbitControls, Plane, Stage } from "@react-three/drei";
+import { OrbitControls, Stage } from "@react-three/drei";
 import Train from "./Train";
 import Bezier from "./util/Bezier";
 import { Canvas } from "@react-three/fiber";
 import { useControls } from "leva";
+import { useEffect } from "react";
 
 function numberInRange(min, max) {
     return Math.random() * (max - min) + min;
@@ -12,13 +13,19 @@ function Experience() {
     const { pathPoints, trainCount } = useControls({
         pathPoints: {
             step: 1,
-            value: 100,
+            value: localStorage.getItem("pathPoints") || 10,
         },
         trainCount: {
             step: 1,
-            value: 3,
+            value: localStorage.getItem("trainCount") || 10,
         },
     });
+
+    useEffect(() => {
+        // Save to local storage
+        localStorage.setItem("pathPoints", pathPoints);
+        localStorage.setItem("trainCount", trainCount);
+    }, [pathPoints, trainCount]);
 
     return (
         <>
