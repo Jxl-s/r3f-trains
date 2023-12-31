@@ -10,8 +10,8 @@ function numberInRange(min, max) {
 }
 
 function Experience() {
-    const { pathPoints, trainCount } = useControls({
-        pathPoints: {
+    const { pathSegments, trainCount } = useControls({
+        pathSegments: {
             step: 1,
             value: localStorage.getItem("pathPoints") || 10,
         },
@@ -23,9 +23,9 @@ function Experience() {
 
     useEffect(() => {
         // Save to local storage
-        localStorage.setItem("pathPoints", pathPoints);
+        localStorage.setItem("pathPoints", pathSegments);
         localStorage.setItem("trainCount", trainCount);
-    }, [pathPoints, trainCount]);
+    }, [pathSegments, trainCount]);
 
     return (
         <>
@@ -39,7 +39,7 @@ function Experience() {
                     {[...Array(trainCount)].map((_, i) => (
                         <Train
                             key={i}
-                            pathPoints={pathPoints}
+                            pathPoints={pathSegments}
                             height={i}
                             curve={
                                 new Bezier(

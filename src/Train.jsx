@@ -34,22 +34,17 @@ export default function Train({ height, curve, pathPoints }) {
     });
 
     useEffect(() => {
-        pathRef.current.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+        const points = [];
 
         for (let i = 0; i <= pathPoints; i++) {
             const t = i / pathPoints;
             const { x, y } = curve.get(t);
 
-            // Create the instance matrix
-            const matrix = new THREE.Matrix4();
-            matrix.setPosition(new THREE.Vector3(x, height, y));
-
-            // Set the matrix for i-th instance
-            pathRef.current.setMatrixAt(i, matrix);
+            points.push(new THREE.Vector3(x, height, y));
         }
 
-        pathRef.current.instanceMatrix.needsUpdate = true;
-    }, [pathPoints, curve, pathRef, height]);
+        pathRef.current.geometry.setFromPoints(points);
+    }, [pathRef, curve, height, pathPoints]);
 
     return (
         <>
@@ -57,10 +52,10 @@ export default function Train({ height, curve, pathPoints }) {
                 <meshStandardMaterial color={randomColor} />
             </mesh>
 
-            <instancedMesh ref={pathRef} args={[null, null, pathPoints + 1]}>
-                <meshStandardMaterial color={randomColor} opacity={0.5} transparent={true} />
-                <sphereGeometry args={[0.1, 8]} />
-            </instancedMesh>
+            <line ref={pathRef}>
+                <bufferGeometry />
+                <lineBasicMaterial color={randomColor} />
+            </line>
         </>
     );
 }
